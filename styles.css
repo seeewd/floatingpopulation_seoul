@@ -1,0 +1,30 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.upper-content,
+.lower-content {
+  flex: 1;
+  /* Add any additional styles for the content sections */
+}
