@@ -35,6 +35,11 @@ html {
   display: flex;
   flex-direction: column;
 }
+/* Add some margin to the SVGs in your CSS file */
+#barChartMale,
+#barChartFemale {
+  margin: 10px;
+}
 
 .upper-content,
 .lower-content {
