@@ -88,10 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const population = locationPopulation[d.properties.adm_cd2]
         if (population) {
           // If it exists, log the region's code, date from the dataset, and total population
-          console.log('Clicked feature code:', d.properties.adm_cd2)
-          console.log('Date:', population.dateId)
-          console.log('population', population.population[selectedHour])
-          console.log('time', selectedHour)
 
           // Update selectedDong with the clicked region
           let selectedDong = d.properties.adm_cd2
@@ -104,11 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
           }
           // Update the bar charts with the new selectedDong
           updateMapColors(selectedHour, d.properties.adm_cd2)
-          updateBarCharts(selectedDong)
+          updateBarCharts(selectedDong, selectedHour)
           updateHeatmap(selectedDong)
         } else {
           // If it doesn't exist, log a default message
-          console.log('No data for clicked feature code:', d.properties.adm_cd2)
         }
       }
 
@@ -159,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
         if (selectedDong) {
-          updateBarCharts(selectedDong)
+          updateBarCharts(selectedDong, selectedHour)
         }
       }
 
@@ -192,7 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
 
         updateMapColors(selectedHour, selectedDong) // Update the map colors when a new date is selected
-        updateBarCharts(selectedDong)
+        updateBarCharts(selectedDong, selectedHour)
+        updateHeatmap(selectedDong)
       })
 
       // Listen for changes in the input value
@@ -206,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createBarChart(svgId, data, ageRanges) {
       // Prepare the data for the bar chart
-      console.log(data)
       let barChartData = data.map((item) => {
         return {
           ageRange: item.ageRange,
@@ -215,8 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       })
 
-      console.log('createBarChart called with', { svgId, data, ageRanges })
-
       let svg = d3.select('#' + svgId)
       svg.selectAll('*').remove()
 
@@ -224,7 +217,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('No svg element found with id', svgId)
         return
       }
-      console.log('barChartData:', barChartData)
 
       let margin = { top: 20, right: 20, bottom: 30, left: 40 }
       let width = +svg.attr('width') - margin.left - margin.right
@@ -270,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .attr('height', (d) => height - yScale(d.female)) // height based on female population
         .attr('fill', 'pink') // color for female population
     }
-    function updateBarCharts(selectedDong) {
+    function updateBarCharts(selectedDong, selectedHour) {
       if (selectedDong) {
         // Filter the data based on the selected dong, date and hour
         let selectedData = data.filter(
@@ -303,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createBarChart('barChart', populationData, ageRanges)
       }
     }
+
     function createHeatmap(svgId, data, timeList, ageList) {
       let svg = d3.select('#' + svgId)
       svg.selectAll('*').remove()
@@ -375,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateHeatmap(selectedDong) {
-      console.log(selectedDong)
       if (selectedDong) {
         // Filter the data based on the selected dong, date and hour
         let selectedData = data.filter(
@@ -410,7 +402,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!ageList.includes(agefield)) ageList.push(agefield)
           })
         })
-        console.log('what', heatmapData, timeList)
         // Create the heatmap
         createHeatmap('heatmap', heatmapData, timeList, ageList)
       }
