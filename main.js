@@ -80,11 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
       // Create a color scale
       const colorScale = d3
         .scaleSequential(d3.interpolateYlOrBr)
-        .domain([8000, 100000]) // min and max population values
+        .domain([8000, 80000]) // min and max population values
 
       const handleClick = (event, d) => {
         // 'd' contains the feature data of the clicked path
         // Check if the population data for the region exists
+        console.log(d.properties.adm_cd2)
         const population = locationPopulation[d.properties.adm_cd2]
         if (population) {
           // If it exists, log the region's code, date from the dataset, and total population
